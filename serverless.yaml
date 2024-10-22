@@ -1,0 +1,103 @@
+service: dynamodb-crud-api-weatherReport
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: dev
+  region: us-west-1
+  environment:
+    DYNAMODB_TABLE_NAME: ${self:custom.postsTableName}
+
+custom:
+  postsTableName: weatherReport-${self:provider.stage}
+
+plugins:
+  - serverless-iam-roles-per-function
+
+functions:
+  getPost:
+    handler: api.getWeatherReport
+    name: get-WeatherReport
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: weather/{Id}
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt PostsTable.Arn
+  createPost:
+    handler: api.createWeatherReport
+    name: create-WeatherReport
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: weather
+          method: POST
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+        Resource: !GetAtt PostsTable.Arn
+  updatePost:
+    handler: api.updateWeatherReport
+    name: update-WeatherReport
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: weather/{Id}
+          method: PUT
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:UpdateItem"
+        Resource: !GetAtt PostsTable.Arn
+  deletePost:
+    handler: api.deleteWeatherReport
+    name: delete-WeatherReport
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: weather/{Id}
+          method: DELETE
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:DeleteItem"
+        Resource: !GetAtt PostsTable.Arn
+  getAllPosts:
+    handler: api.getAllWeatherReport
+    name: get-all-WeatherReport
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: weather
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt PostsTable.Arn
+
+resources:
+  Resources:
+    PostsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.postsTableName}
+        AttributeDefinitions:
+          - AttributeName: Id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: Id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
