@@ -14,7 +14,7 @@ const getWeatherReport = async (event) => {
     try {
         const params = {
             TableName: process.env.DYNAMODB_TABLE_NAME,
-            Key: marshall({ Id: event.pathParameters.Id }),
+            Key: marshall({ id: event.pathParameters.id }),
         };
         const { Item } = await db.send(new GetItemCommand(params));
 
@@ -73,7 +73,7 @@ const updateWeatherReport = async (event) => {
         const objKeys = Object.keys(body);
         const params = {
             TableName: process.env.DYNAMODB_TABLE_NAME,
-            Key: marshall({ Id: event.pathParameters.Id }),
+            Key: marshall({ id: event.pathParameters.id }),
             UpdateExpression: `SET ${objKeys.map((_, index) => `#key${index} = :value${index}`).join(", ")}`,
             ExpressionAttributeNames: objKeys.reduce((acc, key, index) => ({
                 ...acc,
@@ -109,7 +109,7 @@ const deleteWeatherReport = async (event) => {
     try {
         const params = {
             TableName: process.env.DYNAMODB_TABLE_NAME,
-            Key: marshall({ Id: event.pathParameters.Id }),
+            Key: marshall({ id: event.pathParameters.id }),
         };
         const deleteResult = await db.send(new DeleteItemCommand(params));
 
