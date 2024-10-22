@@ -94,7 +94,7 @@ resources:
         TableName: ${self:custom.postsTableName}
         AttributeDefinitions:
           - AttributeName: id
-            AttributeType: S
+            AttributeType: N
         KeySchema:
           - AttributeName: id
             KeyType: HASH
