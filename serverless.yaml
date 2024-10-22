@@ -1,4 +1,4 @@
-service: dynamodb-crud-api-weatherReport
+service: dynamodb-apigateway-crud-api-weatherReport
 
 provider:
   name: aws
