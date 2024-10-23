@@ -50,7 +50,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: weather/{name}
+          path: weather/{id}
           method: PUT
     iamRoleStatements:
       - Effect: "Allow"
@@ -64,7 +64,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: weather/{name}
+          path: weather/{id}
           method: DELETE
     iamRoleStatements:
       - Effect: "Allow"
@@ -93,11 +93,19 @@ resources:
       Properties:
         TableName: ${self:custom.postsTableName}
         AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: N
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        AttributeDefinitions:
           - AttributeName: name
             AttributeType: S
         KeySchema:
           - AttributeName: name
-            KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
