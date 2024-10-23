@@ -1,6 +1,6 @@
 service: dynamodb-crud-api-weatherReport
 
-provnameer:
+provider:
   name: aws
   runtime: nodejs20.x
   stage: dev
@@ -9,7 +9,7 @@ provnameer:
     DYNAMODB_TABLE_NAME: ${self:custom.postsTableName}
 
 custom:
-  postsTableName: weatherReport-${self:provnameer.stage}
+  postsTableName: weatherReport-${self:provider.stage}
 
 plugins:
   - serverless-iam-roles-per-function
@@ -22,7 +22,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: weather/{city}
+          path: weather/{id}
           method: GET
     iamRoleStatements:
       - Effect: "Allow"
@@ -95,14 +95,9 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: N
-          - AttributeName: city
-            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: city
-            KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-       
