@@ -15,8 +15,8 @@ const getWeatherReport = async (event) => {
         const params = {
             TableName: process.env.DYNAMODB_TABLE_NAME,
             Key: marshall(
-                { id: event.pathParameters.id }
-               // { name: event.pathParameters.name }
+                { id: event.pathParameters.id },
+               { city: event.pathParameters.city }
             )
         };
         const { Item } = await db.send(new GetItemCommand(params));

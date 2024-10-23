@@ -22,7 +22,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: weather/{id}
+          path: weather/{city}
           method: GET
     iamRoleStatements:
       - Effect: "Allow"
@@ -95,12 +95,12 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: N
-          - AttributeName: name
+          - AttributeName: city
             AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: name
+          - AttributeName: city
             KeyType: RANGE
         ProvisionedThroughput:
           ReadCapacityUnits: 1
