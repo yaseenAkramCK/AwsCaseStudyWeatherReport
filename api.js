@@ -8,14 +8,16 @@ const {
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 
-const getWeatherReport = async (event) => {
+const getWeatherReport = async (event) => { 
     const response = { statusCode: 200 };
 
     try {
         const params = {
             TableName: process.env.DYNAMODB_TABLE_NAME,
-            Key: marshall({ name: event.pathParameters.name }),
-              //key:({name: event.pathParameters.name })  
+            Key: marshall(
+                { id: event.pathParameters.id },
+                { name: event.pathParameters.name }
+            ),
         };
         const { Item } = await db.send(new GetItemCommand(params));
 
