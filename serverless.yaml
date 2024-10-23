@@ -1,4 +1,4 @@
-service: dynamodb-crud-api-weatherReport1
+service: dynamodb-crud-api-weatherReport
 
 provnameer:
   name: aws
